@@ -20,7 +20,7 @@ Para dar o start na aplicação:
 npm start
 ```
 
-Caso clonarem este repositório, não esqueçam de dar o comando abaixo para instalar as dependências dentro da pasta /react:
+Caso clonarem este repositório, não esqueçam de dar o comando abaixo para instalar as dependências dentro da pasta /my-first-app:
 
 ```
 npm install
