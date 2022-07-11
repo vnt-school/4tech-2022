@@ -14,6 +14,12 @@ Para iniciar um projeto React:
 npx create-react-app my-first-app --template typescript
 ```
 
+Após a instalação das dependências é preciso acessar ao diretório da pasta da aplicação criada:
+
+```
+cd my-first-app
+```
+
 Para dar o start na aplicação:
 
 ```
