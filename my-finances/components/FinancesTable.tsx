@@ -1,7 +1,5 @@
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
-import { IExpenses } from "../models/finances";
-
 import {
   Table,
   Thead,
@@ -10,23 +8,25 @@ import {
   Th,
   Td,
   TableContainer,
-  Spinner,
   Box,
   Button,
   Heading,
-  Container,
 } from "@chakra-ui/react";
-import { getExpenses } from "../services/api";
+import { api } from "../services/api";
+
+interface IExpenses {
+  id: number;
+  date: number;
+  description: string;
+  category: string;
+  value: number;
+}
 
 const FinancesTable: NextPage = () => {
   const [expenses, setExpenses] = useState<IExpenses[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getExpenses().then((response) => {
-      setLoading(false);
-      setExpenses(response);
-    });
+    api.get("/expenses").then(response => setExpenses(response.data))
   }, []);
 
   const toBRL = (value: number) =>
@@ -35,20 +35,17 @@ const FinancesTable: NextPage = () => {
       style: "currency",
     });
 
-  if (loading) {
-    return <Spinner size="xl" />;
-  }
-
   return (
     <>
       <Box
         flexDirection="row"
         display="flex"
-        w={"80vw"}
+        w="80vw"
         justifyContent="space-between"
       >
         <Heading size="lg">
-          Total: {toBRL(expenses?.reduce((acc, curr) => acc + curr.value, 0))}
+          {/* Total: {toBRL(expenses?.reduce((acc, curr) => acc + curr.value, 0))} */}
+          Total: R$ 999,99
         </Heading>
         <Button
           bg="green.400"
@@ -65,7 +62,7 @@ const FinancesTable: NextPage = () => {
         borderColor="gray.100"
         borderWidth={2}
         borderRadius="md"
-        w={"80vw"}
+        w="80vw"
       >
         <TableContainer>
           <Table variant="simple">

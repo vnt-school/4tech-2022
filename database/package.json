@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "json-server db.json -p 3333 --delay 2000"
+    "server": "json-server db.json -p 3333 --delay 2000 --watch"
   },
   "keywords": [],
   "author": "",
