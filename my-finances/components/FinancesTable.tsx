@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { api } from "../services/api";
 
-interface IExpenses {
+export interface IExpenses {
   id: number;
   date: number;
   description: string;
@@ -22,7 +22,11 @@ interface IExpenses {
   value: number;
 }
 
-const FinancesTable: NextPage = () => {
+interface Props {
+  onAddExpense: () => void;
+}
+
+const FinancesTable = ({ onAddExpense }: Props) => {
   const [expenses, setExpenses] = useState<IExpenses[]>([]);
 
   useEffect(() => {
@@ -52,6 +56,7 @@ const FinancesTable: NextPage = () => {
           color="white"
           _hover={{ bg: "green.300" }}
           _active={{ bg: "green.600" }}
+          onClick={() => onAddExpense()}
         >
           Adicionar despesa
         </Button>
