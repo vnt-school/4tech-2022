@@ -1,18 +1,21 @@
-import { Button, FormControl, FormLabel, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select } from "@chakra-ui/react";
+import { Button, FormControl, FormLabel, Grid, GridItem, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, useToast } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { getCategories } from "../services/api";
-import { IExpenses } from "./FinancesTable";
+import { IExpenses } from "../models/IExpense";
+import { getCategories, saveExpense } from "../services/api";
 
 interface Props {
     isOpen: boolean;
-    onSave: (expense: IExpenses) => void;
+    onSave: () => void;
     onClose: () => void;
 }
 
 function NewExpenseModal({ isOpen, onSave, onClose }: Props) {
+    const toast = useToast();
     const [description, setDescription] = useState("");
     const [value, setValue] = useState(1);
     const [category, setCategory] = useState<string>();
+
+    const [isLoading, setLoading] = useState(false);
 
     const [categories, setCategories] = useState<string[]>([]);
 
@@ -21,15 +24,32 @@ function NewExpenseModal({ isOpen, onSave, onClose }: Props) {
             .then((categories) => setCategories(categories.map(category => category.name)));
     }, []);
 
-    const handleAddExpense = () => {
+    const handleAddExpense = async () => {
+        if (!category) {
+            return;
+        }
+
         const expense = {
             description: description,
             value,
             category,
+            date: Date.now(),
         };
-        console.log({ expense });
 
-        onClose();
+        setLoading(true);
+
+        await saveExpense(expense);
+
+        setLoading(false);
+
+        toast({
+            title: "Despesa salva",
+            description: "Despesa foi salva com sucesso",
+            status: "success",
+            position: "top-right",
+        });
+
+        onSave();
     };
 
     return (
@@ -93,6 +113,7 @@ function NewExpenseModal({ isOpen, onSave, onClose }: Props) {
                     <Button
                         colorScheme="green"
                         onClick={handleAddExpense}
+                        disabled={isLoading}
                     >
                         Adicionar
                     </Button>

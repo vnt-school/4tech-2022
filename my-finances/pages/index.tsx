@@ -4,10 +4,21 @@ import styles from "../styles/Home.module.css";
 import FinancesTable from "../components/FinancesTable";
 import { Heading, useDisclosure } from "@chakra-ui/react";
 import NewExpenseModal from "../components/NewExpenseModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { IExpenses } from "../models/IExpense";
+import { api, getExpenses } from "../services/api";
 
 const Home: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [expenses, setExpenses] = useState<IExpenses[]>([]);
+
+  const fetchExpenses = () =>
+    getExpenses().then(expenseList => setExpenses(expenseList));
+
+  useEffect(() => {
+    fetchExpenses();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -22,10 +33,15 @@ const Home: NextPage = () => {
           My Finances
         </Heading>
         <FinancesTable
+          expenses={expenses}
           onAddExpense={() => onOpen()}
         />
         <NewExpenseModal
           isOpen={isOpen}
+          onSave={() => {
+            fetchExpenses();
+            onClose();
+          }}
           onClose={onClose}
         />
       </main>

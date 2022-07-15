@@ -13,31 +13,29 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import { api } from "../services/api";
-
-export interface IExpenses {
-  id: number;
-  date: number;
-  description: string;
-  category: string;
-  value: number;
-}
+import { IExpenses } from "../models/IExpense";
 
 interface Props {
+  expenses: IExpenses[];
   onAddExpense: () => void;
 }
 
-const FinancesTable = ({ onAddExpense }: Props) => {
-  const [expenses, setExpenses] = useState<IExpenses[]>([]);
-
-  useEffect(() => {
-    api.get("/expenses").then(response => setExpenses(response.data))
-  }, []);
-
+const FinancesTable = ({ expenses, onAddExpense }: Props) => {
   const toBRL = (value: number) =>
     value.toLocaleString("pt-BR", {
       currency: "BRL",
       style: "currency",
     });
+
+  // let total = 0;
+
+  // for (let i = 0; i < expenses.length; i++) {
+  //   total += expenses[i].value;
+  // }
+
+  const total = expenses.reduce((acc, cur) => {
+    return acc + cur.value;
+  }, 0);
 
   return (
     <>
@@ -48,8 +46,7 @@ const FinancesTable = ({ onAddExpense }: Props) => {
         justifyContent="space-between"
       >
         <Heading size="lg">
-          {/* Total: {toBRL(expenses?.reduce((acc, curr) => acc + curr.value, 0))} */}
-          Total: R$ 999,99
+          Total: {toBRL(total)}
         </Heading>
         <Button
           bg="green.400"
