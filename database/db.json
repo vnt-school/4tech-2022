@@ -1,27 +1,48 @@
 {
   "categories": [
-    { "id": 1, "name": "Comida" },
-    { "id": 2, "name": "Lazer" },
-    { "id": 3, "name": "Supermercado" },
-    { "id": 4, "name": "Transporte" },
-    { "id": 5, "name": "Jogos" },
-    { "id": 6, "name": "Farmácia" },
-    { "id": 7, "name": "Roupas" }
+    {
+      "id": 1,
+      "name": "Comida"
+    },
+    {
+      "id": 2,
+      "name": "Lazer"
+    },
+    {
+      "id": 3,
+      "name": "Supermercado"
+    },
+    {
+      "id": 4,
+      "name": "Transporte"
+    },
+    {
+      "id": 5,
+      "name": "Jogos"
+    },
+    {
+      "id": 6,
+      "name": "Farmácia"
+    },
+    {
+      "id": 7,
+      "name": "Roupas"
+    }
   ],
   "expenses": [
     {
       "id": 1,
-      "date": 1649041200000,
       "description": "Compra no mercadinho da esquina",
+      "value": 234,
       "category": "Supermercado",
-      "value": 234
+      "date": 1657895804976
     },
     {
       "id": 2,
-      "date": 1651719600000,
       "description": "Restaurante do Shopping",
+      "value": 99.99,
       "category": "Comida",
-      "value": 99.99
+      "date": 1651719600000
     },
     {
       "id": 3,
@@ -42,7 +63,35 @@
       "date": 1657076400000,
       "description": "Passagem de ônibus público",
       "category": "Transporte",
-      "value": 10.0
+      "value": 10
+    },
+    {
+      "description": "Produtos de Limpeza",
+      "value": 90,
+      "category": "Supermercado",
+      "date": 1657888364949,
+      "id": 6
+    },
+    {
+      "description": "Almoço",
+      "value": 21,
+      "category": "Comida",
+      "date": 1657889628629,
+      "id": 7
+    },
+    {
+      "description": "Remédio",
+      "value": 100,
+      "category": "Farmácia",
+      "date": 1657891173111,
+      "id": 8
+    },
+    {
+      "description": "Calça Jeans",
+      "value": 30,
+      "category": "Roupas",
+      "date": 1657891517184,
+      "id": 9
     }
   ]
 }

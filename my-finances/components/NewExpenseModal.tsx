@@ -5,11 +5,12 @@ import { getCategories, saveExpense } from "../services/api";
 
 interface Props {
     isOpen: boolean;
+    expense?: IExpenses;
     onSave: () => void;
     onClose: () => void;
 }
 
-function NewExpenseModal({ isOpen, onSave, onClose }: Props) {
+function NewExpenseModal({ isOpen, expense, onSave, onClose }: Props) {
     const toast = useToast();
     const [description, setDescription] = useState("");
     const [value, setValue] = useState(1);
@@ -18,6 +19,12 @@ function NewExpenseModal({ isOpen, onSave, onClose }: Props) {
     const [isLoading, setLoading] = useState(false);
 
     const [categories, setCategories] = useState<string[]>([]);
+
+    useEffect(() => {
+        setDescription(expense?.description ?? "");
+        setValue(expense?.value ?? 1);
+        setCategory(expense?.category);
+    }, [expense]);
 
     useEffect(() => {
         getCategories()
@@ -29,16 +36,17 @@ function NewExpenseModal({ isOpen, onSave, onClose }: Props) {
             return;
         }
 
-        const expense = {
+        const expenseToSave = {
+            id: expense?.id,
             description: description,
             value,
             category,
-            date: Date.now(),
+            date: expense?.date ?? Date.now(),
         };
 
         setLoading(true);
 
-        await saveExpense(expense);
+        await saveExpense(expenseToSave);
 
         setLoading(false);
 
@@ -78,7 +86,7 @@ function NewExpenseModal({ isOpen, onSave, onClose }: Props) {
                         <GridItem colSpan={1}>
                             <FormControl>
                                 <FormLabel htmlFor="value">Valor</FormLabel>
-                                <NumberInput min={1} onChange={(_, value) => setValue(value)}>
+                                <NumberInput step={0.01} min={0.01} value={value} onChange={(_, value) => setValue(value)}>
                                     <NumberInputField id="value" />
                                     <NumberInputStepper>
                                         <NumberIncrementStepper />
@@ -94,6 +102,7 @@ function NewExpenseModal({ isOpen, onSave, onClose }: Props) {
                                 <Select
                                     id="category"
                                     placeholder="Categoria"
+                                    value={category}
                                     onChange={(e) => setCategory(e.target.value)}
                                 >
                                     {categories.map(category => (
@@ -115,7 +124,7 @@ function NewExpenseModal({ isOpen, onSave, onClose }: Props) {
                         onClick={handleAddExpense}
                         disabled={isLoading}
                     >
-                        Adicionar
+                        {expense ? "Editar" : "Adicionar"}
                     </Button>
                 </ModalFooter>
             </ModalContent>

@@ -6,12 +6,13 @@ import { Heading, useDisclosure } from "@chakra-ui/react";
 import NewExpenseModal from "../components/NewExpenseModal";
 import { useEffect, useState } from "react";
 import { IExpenses } from "../models/IExpense";
-import { api, getExpenses } from "../services/api";
+import { api, getExpenses, removeExpense } from "../services/api";
 
 const Home: NextPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [expenses, setExpenses] = useState<IExpenses[]>([]);
+  const [expenseToEdit, setExpenseToEdit] = useState<IExpenses>();
 
   const fetchExpenses = () =>
     getExpenses().then(expenseList => setExpenses(expenseList));
@@ -35,14 +36,27 @@ const Home: NextPage = () => {
         <FinancesTable
           expenses={expenses}
           onAddExpense={() => onOpen()}
+          onEditExpense={(expense) => {
+            setExpenseToEdit(expense);
+            onOpen();
+          }}
+          onRemoveExpense={async (expense) => {
+            await removeExpense(expense);
+            fetchExpenses();
+          }}
         />
         <NewExpenseModal
           isOpen={isOpen}
+          expense={expenseToEdit}
           onSave={() => {
             fetchExpenses();
             onClose();
+            setExpenseToEdit(undefined);
           }}
-          onClose={onClose}
+          onClose={() => {
+            onClose();
+            setExpenseToEdit(undefined);
+          }}
         />
       </main>
 

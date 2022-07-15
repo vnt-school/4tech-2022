@@ -11,16 +11,20 @@ import {
   Box,
   Button,
   Heading,
+  IconButton,
 } from "@chakra-ui/react";
 import { api } from "../services/api";
 import { IExpenses } from "../models/IExpense";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 
 interface Props {
   expenses: IExpenses[];
   onAddExpense: () => void;
+  onEditExpense: (expense: IExpenses) => void;
+  onRemoveExpense: (expense: IExpenses) => void;
 }
 
-const FinancesTable = ({ expenses, onAddExpense }: Props) => {
+const FinancesTable = ({ expenses, onAddExpense, onEditExpense, onRemoveExpense }: Props) => {
   const toBRL = (value: number) =>
     value.toLocaleString("pt-BR", {
       currency: "BRL",
@@ -75,6 +79,7 @@ const FinancesTable = ({ expenses, onAddExpense }: Props) => {
                 <Th>DESCRIÇÃO</Th>
                 <Th>CATEGORIA</Th>
                 <Th>VALOR</Th>
+                <Th>AÇÕES</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -85,6 +90,24 @@ const FinancesTable = ({ expenses, onAddExpense }: Props) => {
                   <Td>{expense.description}</Td>
                   <Td>{expense.category}</Td>
                   <Td>{toBRL(expense.value)}</Td>
+                  <Td>
+                    <IconButton
+                      aria-label="Editar"
+                      icon={<EditIcon />}
+                      color="yellow.500"
+                      variant="ghost"
+                      onClick={() => {
+                        onEditExpense(expense);
+                      }}
+                    />
+                    <IconButton
+                      aria-label="Remover"
+                      icon={<DeleteIcon />}
+                      color="red.600"
+                      variant="ghost"
+                      onClick={() => onRemoveExpense(expense)}
+                    />
+                  </Td>
                 </Tr>
               ))}
             </Tbody>

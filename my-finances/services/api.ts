@@ -19,8 +19,17 @@ export const getCategories = async () => {
 };
 
 export const saveExpense = async (expense: SaveExpenseDto) => {
+  if (expense.id) {
+    const response = await api.put(`/expenses/${expense.id}`, expense);
+
+    return response.data;
+  }
+
   const response = await api.post("/expenses", expense);
 
   return response.data;
 };
 
+export const removeExpense = async (expense: IExpenses) => {
+  await api.delete(`/expenses/${expense.id}`);
+}

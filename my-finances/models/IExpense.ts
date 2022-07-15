@@ -7,5 +7,5 @@ export interface IExpenses {
 }
 
 export interface SaveExpenseDto extends Omit<IExpenses, 'id'> {
-    
+    id?: number;
 }
